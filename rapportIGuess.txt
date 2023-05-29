@@ -1,0 +1,49 @@
+Bordel Psil
+
+--------------------------
+-- Analyseur Syntaxique --
+-------------------------- 
+Traduit une syntaxe courrante en expressions
+	-> `exp = "(shorthand-quote exp)"    - je cite un commentaire
+	-> 
+
+What the fuck is a parser
+ - a programm that divides elements
+
+
+-------------------------
+-- Sexp Pretty Printer --
+-------------------------
+prints i guess
+
+
+
+
+-- Sexp, Syntaxic expression --
+On a un analyseur syntaxique qui prend une expression et la transforme
+en un "arbre en Haskell" t.q
+	(+ 2 3)
+	--> Scons (Scons (Scons Snil
+				(Ssym "+"))
+			(Snum 2))
+		(Snum 3)
+On a : (((() . +) . 3) . 2) des paires de paires
+
+-- Representation intermediaire "Lambda"
+sorte de ASA (arbre de syntaxe abstraite)
+patrie composee de differents types 
+
+
+
+
+-- Probleme s2t
+On suppose que on va trouver dans Sexp des choses ddu genre 
+	Scons Sexp Sexp - soit des paires de paires
+Notre travail serait supposement de traduire cela en Psil, c.a.d
+	Larw Ltype Ltype
+
+Ultimement, on aurait dans Sexp -> ...(Scons Snum Int) Snum Int)
+Il faudrait que, a partir de cela 
+
+
+
