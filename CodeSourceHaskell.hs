@@ -214,19 +214,28 @@ data Ldec = Ldec Var Ltype      -- Déclaration globale.
 s2t :: Sexp -> Ltype
 s2t (Ssym "Int") = Lint
 
-s2t (Scons Sexp Sexp)
 -- ¡¡COMPLÉTER ICI!!
+s2t (Scons e (Ssym "Int")) = Larw (s2t e) Lint 
+s2t (Scons e (Ssym "->")) = s2t e
+-- end
 s2t se = error ("Type Psil inconnu: " ++ (showSexp se))
 
 s2l :: Sexp -> Lexp
 s2l (Snum n) = Lnum n
 s2l (Ssym s) = Lvar s
 -- ¡¡COMPLÉTER ICI!!
+s2l (Scons (Scons (Scons Snil (Ssym ":")) e) t) = Lhastype (s2l e) (s2t t)
+s2l (Scons (Scons (Scons Snil (Ssym "let")) (Scons (Ssym x) val)) e) = Llet x (s2l val) (s2l e)
+s2l (Scons (Scons (Scons Snil (Ssym "fun")) (Ssym arg)) e) = Lfun arg (s2l e)
+s2l (Scons f arg) = Lapp (s2l f) (s2l arg)
+--end
 s2l se = error ("Expression Psil inconnue: " ++ (showSexp se))  
 
 s2d :: Sexp -> Ldec
 s2d (Scons (Scons (Scons Snil (Ssym "def")) (Ssym v)) e) = Ldef v (s2l e)
 -- ¡¡COMPLÉTER ICI!!
+s2d (Scons (Scons (Scons Snil (Ssym "dec")) (Ssym v)) t) = Ldec v (s2t t)  
+--end
 s2d se = error ("Déclaration Psil inconnue: " ++ showSexp se)
 
 ---------------------------------------------------------------------------
