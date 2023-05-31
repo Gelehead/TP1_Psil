@@ -288,6 +288,20 @@ synth tenv (Lhastype e t) =
       Nothing -> t
       Just err -> error err
 -- ¡¡COMPLÉTER ICI!!
+synth tenv (Lapp f _) = 
+  let 
+    t = synth tenv f
+  in 
+    case t of 
+      Lint -> error "no"
+      Larw _ t1 -> t1
+
+synth tenv (Llet _ _ e2) = synth tenv e2
+
+synth tenv (Lfun param e) = Larw (synth tenv (Lvar param)) (synth tenv e)
+--jpense pas que ça marche celui la
+
+--end
 synth _tenv e = error ("Incapable de trouver le type de: " ++ (show e))
 
         
