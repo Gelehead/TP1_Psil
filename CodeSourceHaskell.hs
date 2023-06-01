@@ -215,6 +215,7 @@ s2t :: Sexp -> Ltype
 s2t (Ssym "Int") = Lint
 
 -- ¡¡COMPLÉTER ICI!!
+s2t (Scons Snil e) = s2t e
 s2t (Scons e (Ssym "Int")) = Larw (s2t e) Lint 
 s2t (Scons e (Ssym "->")) = s2t e
 -- end
@@ -225,8 +226,9 @@ s2l (Snum n) = Lnum n
 s2l (Ssym s) = Lvar s
 -- ¡¡COMPLÉTER ICI!!
 s2l (Scons (Scons (Scons Snil (Ssym ":")) e) t) = Lhastype (s2l e) (s2t t)
-s2l (Scons (Scons (Scons Snil (Ssym "let")) (Scons (Ssym x) val)) e) = Llet x (s2l val) (s2l e)
-s2l (Scons (Scons (Scons Snil (Ssym "fun")) (Ssym arg)) e) = Lfun arg (s2l e)
+s2l (Scons (Scons (Scons Snil (Ssym "let")) (Scons Snil (Scons (Scons Snil (Ssym x)) e1))) e2) = Llet x (s2l e1) (s2l e2)
+s2l (Scons (Scons (Scons Snil (Ssym "fun")) (Ssym param)) e) = Lfun param (s2l e)
+s2l (Scons Snil e) = s2l e
 s2l (Scons f arg) = Lapp (s2l f) (s2l arg)
 --end
 s2l se = error ("Expression Psil inconnue: " ++ (showSexp se))  
@@ -300,7 +302,6 @@ synth tenv (Llet _ _ e2) = synth tenv e2
 
 synth tenv (Lfun param e) = Larw (synth tenv (Lvar param)) (synth tenv e)
 --jpense pas que ça marche celui la
-
 --end
 synth _tenv e = error ("Incapable de trouver le type de: " ++ (show e))
 
