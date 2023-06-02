@@ -359,7 +359,15 @@ process_decl ((tenv, venv), Nothing, res) (Ldef x e) =
         val = eval venv e
         venv' = minsert venv x val
     in ((tenv', venv'), Nothing, (val, ltype) : res)
+
 -- ¡¡COMPLÉTER ICI!!
+process_decl ((tenv, venv), Just (x, ltype'), res) (Ldef x' e') =
+  -- Le programmeur a fourni une annotation de type pour x, et définie sa valeur
+  let tenv' = minsert tenv x ltype'
+      val' = eval venv e'
+      venv' = minsert venv x' val'
+  in ((tenv', venv'), Nothing, (val', ltype') : res)
+--end
 
 ---------------------------------------------------------------------------
 -- Toplevel                                                              --
