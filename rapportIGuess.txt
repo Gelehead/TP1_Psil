@@ -29,21 +29,122 @@ en un "arbre en Haskell" t.q
 		(Snum 3)
 On a : (((() . +) . 3) . 2) des paires de paires
 
+ou
+
+(/ (* (- 68 32) 5) 9)
+==  (((() . /) . (((() . *) . (((() . -) . 68) . 32)) . 5)) . 9)
+==> Scons (Scons (Scons Snil (Ssym "/"))
+              (Scons (Scons (Scons Snil (Ssym "*"))
+                            (Scons (Scons (Scons Snil (Ssym "-"))
+                                          (Snum 68))
+                                   (Snum 32)))
+                     (Snum 5)))
+       (Snum 9)
+
+
+
+
 -- Representation intermediaire "Lambda"
 sorte de ASA (arbre de syntaxe abstraite)
 patrie composee de differents types 
 
+prend la forme de 
+	Lexp = Larw Ltype Ltype
 
 
 
 -- Probleme s2t
-On suppose que on va trouver dans Sexp des choses ddu genre 
+On suppose que on va trouver dans Sexp des choses du genre 
 	Scons Sexp Sexp - soit des paires de paires
 Notre travail serait supposement de traduire cela en Psil, c.a.d
 	Larw Ltype Ltype
 
 Ultimement, on aurait dans Sexp -> ...(Scons Snum Int) Snum Int)
-Il faudrait que, a partir de cela 
+Il faudrait que, a partir de cela on obtienne 
+	Larw (Larw Lint) Lint
+
+
+
+
+-- Probleme s2l
+On doit basically traduire litteralement Sexp en Lexp
+passer de ...
+
+data Sexp = Snil                        -- La liste vide
+          | Scons Sexp Sexp             -- Une paire
+          | Ssym String                 -- Un symbole
+          | Snum Int                    -- Un entier
+
+à...
+
+data Lexp = Lnum Int            -- Constante entière.
+          | Lvar Var            -- Référence à une variable.
+          | Lhastype Lexp Ltype -- Annotation de type.
+          | Lapp Lexp Lexp      -- Appel de fonction, avec un argument.
+          | Llet Var Lexp Lexp  -- Déclaration de variable locale.
+          | Lfun Var Lexp       -- Fonction anonyme.
+
+soit...
+
+e ::= n Un entier signe en decimal
+    | x Reference a une variable
+    | (e0 e1 ... en) Un appel de fonction (curried)
+    | (fun x e) Une fonction d’un argument
+    | (let ((x e1)) e2) Ajout d’une variable locale
+    | ( : e τ ) Annotation de type
+    | + | − | ∗ | / | if0 Op´erations arithm´etiques
+
+
+
+
+
+-- Probleme s2d
+
+
+I guess on utilisera ...
+
+data Ldec = Ldec Var Ltype -- Declaration globale.
+	  | Ldef Var Lexp  -- Definition globale.
+	  deriving (Show, Eq)
+
+
+
+
+
+
+
+
+
+_____________________________
+
+Exemples 
+(def r1 2)                                       ; ↝ 2 : Int
+(def r2 +)                                       ; ↝ <fonction> : Int -> Int -> Int
+(def r3 (+ 2))                                   ; ↝ <fonction> : Int -> Int
+
+(def r4 (+ (: (f2 6 4) Int)))                           ; ↝ <fonction> : Int -> Int
+
+(def r5 ((+ 2) 4))                               ; ↝ 6 : Int
+
+(dec r6 Int)
+(def r6 (+ 2 5))                                 ; ↝ 7 : Int
+
+(def r7 (let ((x 5)) (* x 4)))                   ; ↝ 20 : Int
+
+(dec f1 (Int Int -> Int))
+(def f1 (fun x (fun y (+ y 5))))                 ; ↝ <fonction> : Int -> Int -> Int
+
+(dec recursive Int)
+(def recursive (f1 recursive 37))                ; ↝ 42 : Int
+
+
+
+
+
+
+
+
+
 
 
 

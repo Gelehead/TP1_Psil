@@ -97,7 +97,7 @@ pQuote = do { c <- satisfy (\c -> c `elem` "'`,"); pSpaces; e <- pSexp;
                              (Ssym (case c of
                                      ',' -> "shorthand-comma"
                                      '`' -> "shorthand-backquote"
-                                     _   -> "shorthand-quote")))      -- ca devrait pas plutot etre '\'' ?
+                                     _   -> "shorthand-quote")))
                       e) }
 
 -- Une liste (Tsil) est de la forme ( [e .] {e} )
@@ -213,31 +213,18 @@ data Ldec = Ldec Var Ltype      -- Déclaration globale.
 
 s2t :: Sexp -> Ltype
 s2t (Ssym "Int") = Lint
-
 -- ¡¡COMPLÉTER ICI!!
-s2t (Scons Snil e) = s2t e
-s2t (Scons e (Ssym "Int")) = Larw (s2t e) Lint 
-s2t (Scons e (Ssym "->")) = s2t e
--- end
 s2t se = error ("Type Psil inconnu: " ++ (showSexp se))
 
 s2l :: Sexp -> Lexp
 s2l (Snum n) = Lnum n
 s2l (Ssym s) = Lvar s
 -- ¡¡COMPLÉTER ICI!!
-s2l (Scons (Scons (Scons Snil (Ssym ":")) e) t) = Lhastype (s2l e) (s2t t)
-s2l (Scons (Scons (Scons Snil (Ssym "let")) (Scons Snil (Scons (Scons Snil (Ssym x)) e1))) e2) = Llet x (s2l e1) (s2l e2)
-s2l (Scons (Scons (Scons Snil (Ssym "fun")) (Ssym param)) e) = Lfun param (s2l e)
-s2l (Scons Snil e) = s2l e
-s2l (Scons f arg) = Lapp (s2l f) (s2l arg)
---end
-s2l se = error ("Expression Psil inconnue: " ++ (showSexp se))  
+s2l se = error ("Expression Psil inconnue: " ++ (showSexp se))
 
 s2d :: Sexp -> Ldec
 s2d (Scons (Scons (Scons Snil (Ssym "def")) (Ssym v)) e) = Ldef v (s2l e)
 -- ¡¡COMPLÉTER ICI!!
-s2d (Scons (Scons (Scons Snil (Ssym "dec")) (Ssym v)) t) = Ldec v (s2t t)  
---end
 s2d se = error ("Déclaration Psil inconnue: " ++ showSexp se)
 
 ---------------------------------------------------------------------------
@@ -271,8 +258,6 @@ tenv0 = [("+", Larw Lint (Larw Lint Lint)),
 -- `check Γ e τ` vérifie que `e` a type `τ` dans le contexte `Γ`.
 check :: TEnv -> Lexp -> Ltype -> Maybe TypeError
 -- ¡¡COMPLÉTER ICI!!
-
---end
 check tenv e t
   -- Essaie d'inférer le type et vérifie alors s'il correspond au
   -- type attendu.
@@ -290,19 +275,6 @@ synth tenv (Lhastype e t) =
       Nothing -> t
       Just err -> error err
 -- ¡¡COMPLÉTER ICI!!
-synth tenv (Lapp f _) = 
-  let 
-    t = synth tenv f
-  in 
-    case t of 
-      Lint -> error "no"
-      Larw _ t1 -> t1
-
-synth tenv (Llet _ _ e2) = synth tenv e2
-
-synth tenv (Lfun param e) = Larw (synth tenv (Lvar param)) (synth tenv e)
---jpense pas que ça marche celui la
---end
 synth _tenv e = error ("Incapable de trouver le type de: " ++ (show e))
 
         
@@ -338,23 +310,6 @@ eval :: VEnv -> Lexp -> Value
 eval _venv (Lnum n) = Vnum n
 eval venv (Lvar x) = mlookup venv x
 -- ¡¡COMPLÉTER ICI!!
-eval venv (Lhastype expr t) = ((eval venv expr), Larw t )
-
-eval venv (Lapp fun actual) = 
-    case (eval venv fun) of
-        Vnum _ -> error "ceci n est pas une fonction"
-        Vop  -> error "pls help me"
-        Vfun funEnv formal body -> eval ((formal, actual) : funEnv) body 
-eval venv (Llet var exprVar exp) = 
-    let 
-        valVar = eval venv exprVar
-    in eval venv exp
-eval venv (Lfun f x) = 
-    case eval f of
-        Lfun f2 -> (f, Vop ( eval f ) -> eval f2 -> eval x)
-        Vnum f -> (f, eval x)
-
---end
 
 
 -- État de l'évaluateur.
@@ -376,15 +331,7 @@ process_decl ((tenv, venv), Nothing, res) (Ldef x e) =
         val = eval venv e
         venv' = minsert venv x val
     in ((tenv', venv'), Nothing, (val, ltype) : res)
-
 -- ¡¡COMPLÉTER ICI!!
-process_decl ((tenv, venv), Just (x, ltype'), res) (Ldef x' e') =
-  -- Le programmeur a fourni une annotation de type pour x, et définie sa valeur
-  let tenv' = minsert tenv x ltype'
-      val' = eval venv e'
-      venv' = minsert venv x' val'
-  in ((tenv', venv'), Nothing, (val', ltype') : res)
---end
 
 ---------------------------------------------------------------------------
 -- Toplevel                                                              --
