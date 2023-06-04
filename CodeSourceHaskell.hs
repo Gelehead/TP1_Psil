@@ -341,14 +341,15 @@ eval venv (Lvar x) = mlookup venv x
 eval venv (Lhastype expr t) = eval venv expr
 
 
-eval venv (Lapp f arg) = Vnum 0
---    let
---        fun = eval venv f
---       venv1 = minsert venv (Lfun f' arg)
---    in 
---        case fun of 
---            Vop f -> \() -> f 
-
+eval venv (Lapp f arg) = 
+   let
+      f' = eval venv f
+      arg' = eval venv arg
+   in 
+       case f' of 
+          Vnum _ -> error ("pas une fonction")
+          Vop e1 -> e1 arg' 
+          Vfun funEnv x e2 -> eval ((x, arg'):funEnv) e2
 
 
 eval venv (Llet var exprVar expr) = 
