@@ -68,6 +68,6 @@ La dificulté était plus dans le fait de comprendre le type Estate
 
 \subsection{ Ressenti et fin du Rapport }
 
-Le travail etait 
+Le travail etait tres enrichissant et on a pu apprendre beaucoup sur Haskell et developper de nouvelles facons de penser et de coder.
 
 \end{document}
