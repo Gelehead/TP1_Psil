@@ -1,0 +1,20 @@
+;;; Quelques exemples pour tester                 -*- mode: lisp-data; coding: utf-8 -*-
+
+(dec f1 (Int -> Int))                            
+(def f1 (+ 3))                                   ; ↝ <fonction> : Int -> Int
+(def x (f1 2))                                   ; ↝ 5 : Int 
+
+
+(def v1 (let ((let ((y 6)) (+ 5 y))) (* x 4)))   ; ↝ 44 : Int 
+
+(def f2 (* (: 4 Int)))                           ; ↝ <fonction> : Int -> Int
+
+(def v2 ((- 7) 4))                               ; ↝ 3 : Int
+
+(dec v3 Int)
+(def v3 (+ 2 5))                                 ; ↝ 7 : Int
+
+(def f3 (let ((x 5)) (* x)))                   ; ↝ <fonction> : Int -> Int
+
+(dec recursive Int)
+(def recursive (f1 recursive 37))                ; ↝ 42 : Int
