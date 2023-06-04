@@ -97,7 +97,7 @@ pQuote = do { c <- satisfy (\c -> c `elem` "'`,"); pSpaces; e <- pSexp;
                              (Ssym (case c of
                                      ',' -> "shorthand-comma"
                                      '`' -> "shorthand-backquote"
-                                     _   -> "shorthand-quote")))      -- ca devrait pas plutot etre '\'' ?
+                                     _   -> "shorthand-quote")))
                       e) }
 
 -- Une liste (Tsil) est de la forme ( [e .] {e} )
@@ -226,8 +226,10 @@ s2l (Snum n) = Lnum n
 s2l (Ssym s) = Lvar s
 -- ¡¡COMPLÉTER ICI!!
 s2l (Scons (Scons (Scons Snil (Ssym ":")) e) t) = Lhastype (s2l e) (s2t t)
-s2l (Scons (Scons (Scons Snil (Ssym "let")) (Scons Snil (Scons (Scons Snil (Ssym x)) e1))) e2) = Llet x (s2l e1) (s2l e2)
-s2l (Scons (Scons (Scons Snil (Ssym "fun")) (Ssym param)) e) = Lfun param (s2l e)
+s2l (Scons (Scons (Scons Snil (Ssym "let")) (Scons Snil (Scons (Scons Snil
+ (Ssym x)) e1))) e2) = Llet x (s2l e1) (s2l e2)
+s2l (Scons (Scons (Scons Snil (Ssym "fun")) (Ssym param)) e) = Lfun param 
+ (s2l e)
 s2l (Scons Snil e) = s2l e
 s2l (Scons f arg) = Lapp (s2l f) (s2l arg)
 --end
@@ -385,7 +387,7 @@ process_decl ((tenv, venv), Nothing, res) (Ldef x e) =
 
 -- ¡¡COMPLÉTER ICI!!
 process_decl ((tenv, venv), Just (x, ltype'), res) (Ldef x' e') =
-  -- Le programmeur a fourni une annotation de type pour x, et définie sa valeur
+ -- Le programmeur a fourni une annotation de type pour x, et définie sa valeur
   let tenv' = minsert tenv x ltype'
       val' = eval venv e'
       venv' = minsert venv x' val'
