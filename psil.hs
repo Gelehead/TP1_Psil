@@ -1,4 +1,9 @@
 -- TP-1  --- Implantation d'une sorte de Lisp          -*- coding: utf-8 -*-
+
+-- Leo Tremblay
+-- Oscar Lavolet
+
+
 {-# OPTIONS_GHC -Wall #-}
 --
 -- Ce fichier défini les fonctionalités suivantes:
