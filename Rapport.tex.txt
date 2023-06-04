@@ -1,0 +1,73 @@
+\documentclass{article}
+\usepackage[french]{babel}
+
+\title{Psil, une sorte de Lisp}
+\author{Leo Tremblay, Oscar Lavolet}
+\date{ 3 Juin 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+Dans le contexte du cours de IFT 2035 - concepts des languages de programmation, nous allons essayer de coder Psil, un language fonctionnel statique inspiré du language déjà existant "Lisp"
+
+Ce projet nous permet de mieux comprendre la programmation fonctionnelle et le language Haskell en general ainsi que les interactions qu'il peut avoir avec d autres languages.
+
+
+\section{Etapes de developpement}
+
+\subsection{Convertir au format \emph{lambda} }
+
+On cherche dans cette partie a convertir des expressions generiques à des expressions lambdas, tel que :
+\begin{displaymath}
+    \texttt{(+ 6 7)}
+\end{displaymath}
+vaudrait...
+\begin{displaymath}
+    \texttt{Scons (Scons (Scons Snil
+(Ssym "+"))
+(Snum 2))
+(Snum 3)
+ }
+\end{displaymath}
+
+Cette premiere partie etait la plus compliquée, en effet, il fallait comprendre la syntaxe des {\slshape Sexp}, comment assembler les {\slshape Scons} et comment traduire Psil en {\slshape Sexp}
+
+\subsubsection{ SExp to Lambda Type }
+La premiere etape du developpement etait de typer les expressions generiques en utilisant la fonction {\slshape s2t} 
+
+
+\subsubsection{ SExp to Lambda Expression }
+
+La deuxieme etape consistait en transformer les expressions en une forme interpretable pour notre nouveau language
+
+Un peu de temps a été passé à arranger les {\slshape Scons} correctement et à refléchir à la composition des arguments
+
+
+\subsubsection{ SExp to Lambda Declaration} 
+
+Dans la troisième étape, on devait transformer la syntaxe {\slshape Sexp} pour pouvoir faire passer des declarations de fonctions lambda
+
+\subsection{ Check }
+Avec le travail que nous avions, on a pu considerer que le premier cas, le cas donné dans le code source était exhaustif, ou en tout cas, les choses que l on pouvait ajouter n etaient pas assez flagrantes pour que nous les remarquiions.
+
+\subsection{ Synthetiseur }
+
+On va creer une fonction capable de nous renvoyer les types des {\slshape Sexp}. On ira comparer les expressions que l on a analysé.
+Pas de grands problemes dans cette partie, a part pour le synthetiseur de Lfun qui etait ambigüe.
+
+
+\subsection {Evaluateur }
+Tres surement la partie ou l'on a eu le plus de mal. Le fait de coder comment l execution d un language doit marcher est beaucoup plus punitif que ce à quoi on pourrait s'attendre. Dans le sens où la recursivite et l interaction entre les fonction est si presente que, si la base du language n'est pas solide, on ne pourra pas coder plus loin.
+
+\subsection{ Process_decl }
+
+La dificulté était plus dans le fait de comprendre le type Estate
+
+\subsection{ Ressenti et fin du Rapport }
+
+Le travail etait 
+
+\end{document}
