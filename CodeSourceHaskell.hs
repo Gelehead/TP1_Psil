@@ -338,18 +338,23 @@ eval :: VEnv -> Lexp -> Value
 eval _venv (Lnum n) = Vnum n
 eval venv (Lvar x) = mlookup venv x
 -- ¡¡COMPLÉTER ICI!!
-eval venv (Lhastype expr t) = Vnum 0--((eval venv expr), Larw t )
+eval venv (Lhastype expr t) = eval venv expr
+
 
 eval venv (Lapp fun actual) = 
-    case (eval venv fun) of
-        Vnum _ -> error "ceci n est pas une fonction"
-        Vop  _ -> error "pls help me"
-        Vfun funEnv formal body -> eval ((formal, actual) : funEnv) body 
-eval venv (Llet var exprVar exp) = 
+    let 
+        f = lookup fun 
+    in
+        Vfun venv f actual
+
+
+eval venv (Llet var exprVar expr) = 
     let 
         valVar = eval venv exprVar
         venv1 = minsert venv var valVar
-    in eval venv1 exp
+    in eval venv1 expr
+
+
 eval venv (Lfun f x) = Vfun venv f x
 --end
 
