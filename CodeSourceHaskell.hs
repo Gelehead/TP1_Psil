@@ -300,7 +300,7 @@ synth tenv (Lapp f _) =
 
 synth tenv (Llet _ _ e2) = synth tenv e2
 
-synth tenv (Lfun param e) = Larw (synth tenv (Lvar param)) (synth tenv e)
+synth tenv (Lfun param e) = mlookup tenv param
 --jpense pas que ça marche celui la
 --end
 synth _tenv e = error ("Incapable de trouver le type de: " ++ (show e))
