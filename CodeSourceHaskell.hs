@@ -341,11 +341,14 @@ eval venv (Lvar x) = mlookup venv x
 eval venv (Lhastype expr t) = eval venv expr
 
 
-eval venv (Lapp fun actual) = 
-    let 
-        f = lookup fun 
-    in
-        Vfun venv f actual
+eval venv (Lapp f arg) = Vnum 0
+--    let
+--        fun = eval venv f
+--       venv1 = minsert venv (Lfun f' arg)
+--    in 
+--        case fun of 
+--            Vop f -> \() -> f 
+
 
 
 eval venv (Llet var exprVar expr) = 
