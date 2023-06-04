@@ -14,4 +14,4 @@
 (def f3 (let ((x 5)) (* x)))                     ; ↝ <fonction> : Int -> Int
 
 (dec f4 (Int Int -> Int))
-(def f4 (fun x (fun y (+ (- y x) 3))))           ; ↝ <fonction> : Int -> Int -> Intg
+(def f4 (fun x (fun y (+ (- y x) 3))))           ; ↝ <fonction> : Int -> Int -> Int
